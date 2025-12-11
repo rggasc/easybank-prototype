@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyBank - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>💳 EasyBank</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">Dashboard</a></li>
+                <li><a href="account-details.html">Accounts</a></li>
+                <li><a href="fund-transfer.html">Transfer</a></li>
+                <li><a href="bill-payment.html">Pay Bills</a></li>
+                <li><a href="customer-support.html">Support</a></li>
+                <li><a href="login.html" class="btn-logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h2>Welcome back, John Doe</h2>
+            <p class="subtitle">Here's your financial overview</p>
+        </section>
+
+        <!-- Account Summary Cards -->
+        <section class="account-cards">
+            <div class="card account-card">
+                <div class="card-header">
+                    <h3>Checking Account</h3>
+                    <span class="account-number">****4521</span>
+                </div>
+                <div class="balance">
+                    <p class="balance-label">Available Balance</p>
+                    <p class="balance-amount">$5,234.89</p>
+                </div>
+                <a href="account-details.html" class="card-link">View Details →</a>
+            </div>
+
+            <div class="card account-card">
+                <div class="card-header">
+                    <h3>Savings Account</h3>
+                    <span class="account-number">****7832</span>
+                </div>
+                <div class="balance">
+                    <p class="balance-label">Available Balance</p>
+                    <p class="balance-amount">$12,450.00</p>
+                </div>
+                <a href="account-details.html" class="card-link">View Details →</a>
+            </div>
+
+            <div class="card account-card">
+                <div class="card-header">
+                    <h3>Business Account</h3>
+                    <span class="account-number">****9104</span>
+                </div>
+                <div class="balance">
+                    <p class="balance-label">Available Balance</p>
+                    <p class="balance-amount">$8,920.50</p>
+                </div>
+                <a href="account-details.html" class="card-link">View Details →</a>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <h3>Quick Actions</h3>
+            <div class="action-buttons">
+                <a href="fund-transfer.html" class="action-btn">
+                    <span class="icon">💸</span>
+                    <span>Transfer Funds</span>
+                </a>
+                <a href="bill-payment.html" class="action-btn">
+                    <span class="icon">📄</span>
+                    <span>Pay Bills</span>
+                </a>
+                <a href="account-details.html" class="action-btn">
+                    <span class="icon">📊</span>
+                    <span>View Transactions</span>
+                </a>
+                <a href="customer-support.html" class="action-btn">
+                    <span class="icon">💬</span>
+                    <span>Contact Support</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Recent Transactions -->
+        <section class="recent-transactions">
+            <h3>Recent Transactions</h3>
+            <div class="card">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Account</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dec 09, 2025</td>
+                            <td>Grocery Store</td>
+                            <td>Checking ****4521</td>
+                            <td class="amount negative">-$87.42</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 08, 2025</td>
+                            <td>Payroll Deposit</td>
+                            <td>Checking ****4521</td>
+                            <td class="amount positive">+$2,500.00</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 07, 2025</td>
+                            <td>Electric Bill Payment</td>
+                            <td>Checking ****4521</td>
+                            <td class="amount negative">-$125.00</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 06, 2025</td>
+                            <td>Transfer to Savings</td>
+                            <td>Checking ****4521</td>
+                            <td class="amount negative">-$500.00</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 05, 2025</td>
+                            <td>ATM Withdrawal</td>
+                            <td>Checking ****4521</td>
+                            <td class="amount negative">-$100.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="account-details.html" class="view-all">View All Transactions →</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Customer Support Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header" onclick="toggleChat()">
+            <span>💬 Need Help?</span>
+        </div>
+        <div class="chat-body" id="chatBody" style="display: none;">
+            <p>Hello! How can we assist you today?</p>
+            <a href="customer-support.html" class="btn btn-primary">Start Chat</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
