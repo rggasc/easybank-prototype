@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyBank - Account Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>💳 EasyBank</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="account-details.html" class="active">Accounts</a></li>
+                <li><a href="fund-transfer.html">Transfer</a></li>
+                <li><a href="bill-payment.html">Pay Bills</a></li>
+                <li><a href="customer-support.html">Support</a></li>
+                <li><a href="login.html" class="btn-logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="page-header">
+            <h2>Account Management</h2>
+            <p>View your account balances, transaction history, and download statements</p>
+        </div>
+
+        <!-- Account Selection -->
+        <section class="account-selector">
+            <label for="accountSelect">Select Account:</label>
+            <select id="accountSelect" onchange="switchAccount(this.value)">
+                <option value="checking">Checking Account - ****4521</option>
+                <option value="savings">Savings Account - ****7832</option>
+                <option value="business">Business Account - ****9104</option>
+            </select>
+        </section>
+
+        <!-- Account Details Card -->
+        <section class="account-details-card">
+            <div class="card">
+                <div class="account-info">
+                    <h3 id="accountName">Checking Account</h3>
+                    <p class="account-number" id="accountNumber">Account Number: ****4521</p>
+                    <div class="balance-display">
+                        <div class="balance-item">
+                            <p class="label">Current Balance</p>
+                            <p class="amount" id="currentBalance">$5,234.89</p>
+                        </div>
+                        <div class="balance-item">
+                            <p class="label">Available Balance</p>
+                            <p class="amount" id="availableBalance">$5,234.89</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="account-actions">
+                    <button class="btn btn-primary" onclick="window.location.href='fund-transfer.html'">
+                        Transfer Funds
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadStatement()">
+                        Download Statement
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transaction History -->
+        <section class="transaction-history">
+            <div class="section-header">
+                <h3>Transaction History</h3>
+                <div class="search-filter">
+                    <input type="text" id="searchInput" placeholder="Search transactions..." 
+                           onkeyup="searchTransactions()">
+                    <select id="filterSelect" onchange="filterTransactions()">
+                        <option value="all">All Transactions</option>
+                        <option value="deposits">Deposits Only</option>
+                        <option value="withdrawals">Withdrawals Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <table class="transaction-table" id="transactionTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dec 09, 2025</td>
+                            <td>Grocery Store Purchase</td>
+                            <td>Shopping</td>
+                            <td class="amount negative">-$87.42</td>
+                            <td>$5,234.89</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 08, 2025</td>
+                            <td>Payroll Deposit - Employer</td>
+                            <td>Income</td>
+                            <td class="amount positive">+$2,500.00</td>
+                            <td>$5,322.31</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 07, 2025</td>
+                            <td>Electric Bill Payment</td>
+                            <td>Utilities</td>
+                            <td class="amount negative">-$125.00</td>
+                            <td>$2,822.31</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 06, 2025</td>
+                            <td>Transfer to Savings</td>
+                            <td>Transfer</td>
+                            <td class="amount negative">-$500.00</td>
+                            <td>$2,947.31</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 05, 2025</td>
+                            <td>ATM Withdrawal - Main St</td>
+                            <td>Cash</td>
+                            <td class="amount negative">-$100.00</td>
+                            <td>$3,447.31</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 04, 2025</td>
+                            <td>Restaurant - Downtown Cafe</td>
+                            <td>Dining</td>
+                            <td class="amount negative">-$45.67</td>
+                            <td>$3,547.31</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 03, 2025</td>
+                            <td>Gas Station</td>
+                            <td>Transportation</td>
+                            <td class="amount negative">-$52.98</td>
+                            <td>$3,592.98</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 02, 2025</td>
+                            <td>Online Purchase - Amazon</td>
+                            <td>Shopping</td>
+                            <td class="amount negative">-$134.50</td>
+                            <td>$3,645.96</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 01, 2025</td>
+                            <td>Rent Payment</td>
+                            <td>Housing</td>
+                            <td class="amount negative">-$1,200.00</td>
+                            <td>$3,780.46</td>
+                        </tr>
+                        <tr>
+                            <td>Nov 30, 2025</td>
+                            <td>Interest Earned</td>
+                            <td>Interest</td>
+                            <td class="amount positive">+$3.25</td>
+                            <td>$4,980.46</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <button class="btn btn-secondary">Previous</button>
+                    <span>Page 1 of 5</span>
+                    <button class="btn btn-secondary">Next</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
