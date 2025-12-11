@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyBank - Bill Payment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>💳 EasyBank</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="account-details.html">Accounts</a></li>
+                <li><a href="fund-transfer.html">Transfer</a></li>
+                <li><a href="bill-payment.html" class="active">Pay Bills</a></li>
+                <li><a href="customer-support.html">Support</a></li>
+                <li><a href="login.html" class="btn-logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="page-header">
+            <h2>Bill Payment</h2>
+            <p>Manage payees and schedule one-time or recurring payments</p>
+        </div>
+
+        <!-- Quick Pay Section -->
+        <section class="quick-pay">
+            <div class="card">
+                <h3>Saved Payees</h3>
+                <div class="payee-grid">
+                    <div class="payee-card" onclick="selectPayee('electric')">
+                        <div class="payee-icon">⚡</div>
+                        <p class="payee-name">Electric Company</p>
+                        <p class="payee-account">Acct: 123456789</p>
+                    </div>
+                    <div class="payee-card" onclick="selectPayee('internet')">
+                        <div class="payee-icon">🌐</div>
+                        <p class="payee-name">Internet Service</p>
+                        <p class="payee-account">Acct: 987654321</p>
+                    </div>
+                    <div class="payee-card" onclick="selectPayee('water')">
+                        <div class="payee-icon">💧</div>
+                        <p class="payee-name">Water Utility</p>
+                        <p class="payee-account">Acct: 555123456</p>
+                    </div>
+                    <div class="payee-card" onclick="openAddPayeeModal()">
+                        <div class="payee-icon add">+</div>
+                        <p class="payee-name">Add New Payee</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Form -->
+        <section class="payment-form-section">
+            <div class="card">
+                <h3>Make a Payment</h3>
+                <form id="paymentForm" onsubmit="handlePayment(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="payFromAccount">Pay From Account *</label>
+                            <select id="payFromAccount" name="payFromAccount" required>
+                                <option value="">Select account</option>
+                                <option value="checking">Checking Account - ****4521 ($5,234.89)</option>
+                                <option value="savings">Savings Account - ****7832 ($12,450.00)</option>
+                                <option value="business">Business Account - ****9104 ($8,920.50)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="payeeSelect">Payee *</label>
+                            <select id="payeeSelect" name="payeeSelect" required>
+                                <option value="">Select payee</option>
+                                <option value="electric">Electric Company</option>
+                                <option value="internet">Internet Service</option>
+                                <option value="water">Water Utility</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="paymentAmount">Payment Amount ($) *</label>
+                            <input type="number" id="paymentAmount" name="paymentAmount" required 
+                                   min="0.01" step="0.01" placeholder="0.00">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paymentDate">Payment Date *</label>
+                            <input type="date" id="paymentDate" name="paymentDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentType">Payment Type *</label>
+                        <select id="paymentType" name="paymentType" required onchange="toggleRecurring()">
+                            <option value="one-time">One-Time Payment</option>
+                            <option value="recurring">Recurring Payment</option>
+                        </select>
+                    </div>
+
+                    <div id="recurringOptions" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="frequency">Frequency</label>
+                                <select id="frequency" name="frequency">
+                                    <option value="weekly">Weekly</option>
+                                    <option value="biweekly">Bi-Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="endDate">End Date (Optional)</label>
+                                <input type="date" id="endDate" name="endDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentMemo">Memo (Optional)</label>
+                        <input type="text" id="paymentMemo" name="paymentMemo" 
+                               placeholder="Add a note" maxlength="100">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="resetPaymentForm()">
+                            Clear Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Review Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Scheduled Payments -->
+        <section class="scheduled-payments">
+            <h3>Scheduled Payments</h3>
+            <div class="card">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Payee</th>
+                            <th>Amount</th>
+                            <th>Next Payment</th>
+                            <th>Frequency</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Electric Company</td>
+                            <td>$125.00</td>
+                            <td>Dec 15, 2025</td>
+                            <td>Monthly</td>
+                            <td><span class="status-badge active">Active</span></td>
+                            <td>
+                                <button class="btn-small">Edit</button>
+                                <button class="btn-small danger">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Internet Service</td>
+                            <td>$89.99</td>
+                            <td>Dec 20, 2025</td>
+                            <td>Monthly</td>
+                            <td><span class="status-badge active">Active</span></td>
+                            <td>
+                                <button class="btn-small">Edit</button>
+                                <button class="btn-small danger">Cancel</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Water Utility</td>
+                            <td>$45.00</td>
+                            <td>Dec 12, 2025</td>
+                            <td>Monthly</td>
+                            <td><span class="status-badge active">Active</span></td>
+                            <td>
+                                <button class="btn-small">Edit</button>
+                                <button class="btn-small danger">Cancel</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Recent Payments -->
+        <section class="recent-payments">
+            <h3>Payment History</h3>
+            <div class="card">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Payee</th>
+                            <th>Account</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dec 07, 2025</td>
+                            <td>Electric Company</td>
+                            <td>Checking ****4521</td>
+                            <td>$125.00</td>
+                            <td><span class="status-badge success">Paid</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nov 20, 2025</td>
+                            <td>Internet Service</td>
+                            <td>Checking ****4521</td>
+                            <td>$89.99</td>
+                            <td><span class="status-badge success">Paid</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nov 12, 2025</td>
+                            <td>Water Utility</td>
+                            <td>Checking ****4521</td>
+                            <td>$45.00</td>
+                            <td><span class="status-badge success">Paid</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Payee Modal -->
+    <div id="addPayeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Payee</h3>
+                <span class="close" onclick="closeAddPayeeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addPayeeForm">
+                    <div class="form-group">
+                        <label for="payeeName">Payee Name *</label>
+                        <input type="text" id="payeeName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payeeAccount">Account Number *</label>
+                        <input type="text" id="payeeAccount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payeeCategory">Category</label>
+                        <select id="payeeCategory">
+                            <option value="utilities">Utilities</option>
+                            <option value="insurance">Insurance</option>
+                            <option value="loans">Loans</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddPayeeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="addPayee()">Add Payee</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Confirmation Modal -->
+    <div id="paymentConfirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Payment</h3>
+                <span class="close" onclick="closePaymentConfirmModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="confirmation-details">
+                    <p><strong>Pay From:</strong> <span id="confirmPayAccount"></span></p>
+                    <p><strong>Payee:</strong> <span id="confirmPayee"></span></p>
+                    <p><strong>Amount:</strong> <span id="confirmPayAmount"></span></p>
+                    <p><strong>Date:</strong> <span id="confirmPayDate"></span></p>
+                    <p><strong>Type:</strong> <span id="confirmPayType"></span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePaymentConfirmModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmPayment()">Confirm Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
