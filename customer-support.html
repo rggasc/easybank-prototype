@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyBank - Customer Support</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>💳 EasyBank</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="account-details.html">Accounts</a></li>
+                <li><a href="fund-transfer.html">Transfer</a></li>
+                <li><a href="bill-payment.html">Pay Bills</a></li>
+                <li><a href="customer-support.html" class="active">Support</a></li>
+                <li><a href="login.html" class="btn-logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="page-header">
+            <h2>Customer Support</h2>
+            <p>We're here to help! Choose how you'd like to get in touch</p>
+        </div>
+
+        <!-- Support Options -->
+        <section class="support-options">
+            <div class="support-card">
+                <div class="support-icon">💬</div>
+                <h3>Live Chat</h3>
+                <p>Chat with our support team in real-time</p>
+                <button class="btn btn-primary" onclick="startChat()">Start Chat</button>
+                <p class="support-info">Average wait time: 2 minutes</p>
+            </div>
+
+            <div class="support-card">
+                <div class="support-icon">📧</div>
+                <h3>Email Support</h3>
+                <p>Send us a detailed message</p>
+                <button class="btn btn-primary" onclick="showEmailForm()">Send Email</button>
+                <p class="support-info">Response within 24 hours</p>
+            </div>
+
+            <div class="support-card">
+                <div class="support-icon">📞</div>
+                <h3>Phone Support</h3>
+                <p>Speak with a representative</p>
+                <button class="btn btn-primary">Call: 1-800-EASYBANK</button>
+                <p class="support-info">Available 24/7</p>
+            </div>
+        </section>
+
+        <!-- Live Chat Interface -->
+        <section id="chatInterface" class="chat-interface" style="display: none;">
+            <div class="card chat-card">
+                <div class="chat-header-bar">
+                    <h3>Live Chat with Support</h3>
+                    <button class="close-chat" onclick="closeChat()">×</button>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            <p>Hello! I'm the EasyBank Assistant. How can I help you today?</p>
+                            <span class="message-time">Just now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-replies">
+                    <button class="quick-reply-btn" onclick="sendQuickReply('Account Balance')">
+                        Check Account Balance
+                    </button>
+                    <button class="quick-reply-btn" onclick="sendQuickReply('Transaction Issue')">
+                        Transaction Issue
+                    </button>
+                    <button class="quick-reply-btn" onclick="sendQuickReply('Reset Password')">
+                        Reset Password
+                    </button>
+                    <button class="quick-reply-btn" onclick="sendQuickReply('Other')">
+                        Other Issue
+                    </button>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type your message..." 
+                           onkeypress="handleChatKeypress(event)">
+                    <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Email Form -->
+        <section id="emailForm" class="email-form-section" style="display: none;">
+            <div class="card">
+                <div class="section-header">
+                    <h3>Send Us an Email</h3>
+                    <button class="close-form" onclick="closeEmailForm()">×</button>
+                </div>
+                
+                <form onsubmit="handleEmailSubmit(event)">
+                    <div class="form-group">
+                        <label for="supportCategory">Category *</label>
+                        <select id="supportCategory" required>
+                            <option value="">Select a category</option>
+                            <option value="account">Account Issues</option>
+                            <option value="transactions">Transaction Problems</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="security">Security Concerns</option>
+                            <option value="billing">Billing Questions</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supportSubject">Subject *</label>
+                        <input type="text" id="supportSubject" required 
+                               placeholder="Brief description of your issue">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supportMessage">Message *</label>
+                        <textarea id="supportMessage" rows="6" required 
+                                  placeholder="Please provide details about your issue..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supportPriority">Priority</label>
+                        <select id="supportPriority">
+                            <option value="low">Low - General inquiry</option>
+                            <option value="medium" selected>Medium - Issue affecting service</option>
+                            <option value="high">High - Urgent issue</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeEmailForm()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How do I transfer money between accounts?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Go to the Transfer Funds page, select your source and destination accounts, 
+                        enter the amount, and click Review Transfer. You can transfer funds instantly 
+                        between your own accounts.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How do I set up recurring bill payments?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Navigate to Pay Bills, select or add a payee, choose "Recurring Payment" 
+                        as the payment type, set your frequency (weekly, monthly, etc.), and confirm 
+                        the payment details.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How can I view my transaction history?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Click on "Accounts" in the navigation menu, select the account you want 
+                        to view, and scroll down to see your complete transaction history. You can 
+                        also search and filter transactions.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is my data secure?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! EasyBank uses bank-level 256-bit encryption for all data transmission 
+                        and storage. We comply with PCI DSS standards and employ multi-factor 
+                        authentication to protect your accounts.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What should I do if I notice unauthorized transactions?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Immediately contact our support team via phone (1-800-EASYBANK) or live chat. 
+                        We'll freeze your account if necessary and begin an investigation. Most fraud 
+                        cases are resolved within 48 hours.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I access EasyBank on mobile devices?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! EasyBank is fully responsive and works on all modern browsers on 
+                        desktop, tablet, and mobile devices. We also follow WCAG 2.1 accessibility 
+                        standards.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Tickets -->
+        <section class="support-tickets">
+            <h3>Your Support Tickets</h3>
+            <div class="card">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Subject</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#12345</td>
+                            <td>Unable to complete transfer</td>
+                            <td>Transactions</td>
+                            <td><span class="status-badge success">Resolved</span></td>
+                            <td>Dec 05, 2025</td>
+                            <td><button class="btn-small">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#12344</td>
+                            <td>Question about fees</td>
+                            <td>Billing</td>
+                            <td><span class="status-badge success">Resolved</span></td>
+                            <td>Nov 28, 2025</td>
+                            <td><button class="btn-small">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
