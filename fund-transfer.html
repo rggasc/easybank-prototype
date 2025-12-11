@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyBank - Fund Transfer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>💳 EasyBank</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="account-details.html">Accounts</a></li>
+                <li><a href="fund-transfer.html" class="active">Transfer</a></li>
+                <li><a href="bill-payment.html">Pay Bills</a></li>
+                <li><a href="customer-support.html">Support</a></li>
+                <li><a href="login.html" class="btn-logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="page-header">
+            <h2>Transfer Funds</h2>
+            <p>Transfer money between your accounts or to other registered users</p>
+        </div>
+
+        <!-- Transfer Form -->
+        <section class="transfer-form-section">
+            <div class="card">
+                <form id="transferForm" onsubmit="handleTransfer(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fromAccount">From Account *</label>
+                            <select id="fromAccount" name="fromAccount" required onchange="updateAvailableBalance()">
+                                <option value="">Select account</option>
+                                <option value="checking">Checking Account - ****4521 ($5,234.89)</option>
+                                <option value="savings">Savings Account - ****7832 ($12,450.00)</option>
+                                <option value="business">Business Account - ****9104 ($8,920.50)</option>
+                            </select>
+                            <p class="available-balance" id="availableBalanceText"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transferType">Transfer Type *</label>
+                            <select id="transferType" name="transferType" required onchange="toggleRecipientFields()">
+                                <option value="">Select type</option>
+                                <option value="own">Between My Accounts</option>
+                                <option value="internal">To Another EasyBank User</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="recipientFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="toAccount">To Account *</label>
+                            <select id="toAccount" name="toAccount">
+                                <option value="">Select account</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="recipientUserField" style="display: none;">
+                            <label for="recipientUser">Recipient Username or Email *</label>
+                            <input type="text" id="recipientUser" name="recipientUser" 
+                                   placeholder="Enter username or email">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="amount">Amount ($) *</label>
+                            <input type="number" id="amount" name="amount" required 
+                                   min="0.01" step="0.01" placeholder="0.00"
+                                   onchange="validateAmount()">
+                            <p class="error-message" id="amountError" style="display: none;"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transferDate">Transfer Date *</label>
+                            <input type="date" id="transferDate" name="transferDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="memo">Memo (Optional)</label>
+                        <input type="text" id="memo" name="memo" 
+                               placeholder="Add a note about this transfer" maxlength="100">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            Clear Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Review Transfer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Recent Transfers -->
+        <section class="recent-transfers">
+            <h3>Recent Transfers</h3>
+            <div class="card">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dec 06, 2025</td>
+                            <td>Checking ****4521</td>
+                            <td>Savings ****7832</td>
+                            <td>$500.00</td>
+                            <td><span class="status-badge success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nov 28, 2025</td>
+                            <td>Business ****9104</td>
+                            <td>Checking ****4521</td>
+                            <td>$1,000.00</td>
+                            <td><span class="status-badge success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Nov 15, 2025</td>
+                            <td>Checking ****4521</td>
+                            <td>Savings ****7832</td>
+                            <td>$750.00</td>
+                            <td><span class="status-badge success">Completed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Transfer</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="confirmation-details">
+                    <p><strong>From:</strong> <span id="confirmFrom"></span></p>
+                    <p><strong>To:</strong> <span id="confirmTo"></span></p>
+                    <p><strong>Amount:</strong> <span id="confirmAmount"></span></p>
+                    <p><strong>Date:</strong> <span id="confirmDate"></span></p>
+                    <p><strong>Memo:</strong> <span id="confirmMemo"></span></p>
+                </div>
+                <p class="warning-text">⚠️ Please review the details carefully before confirming.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmTransfer()">Confirm Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header success">
+                <h3>✓ Transfer Successful</h3>
+            </div>
+            <div class="modal-body">
+                <p>Your transfer has been processed successfully!</p>
+                <p class="confirmation-number">Confirmation #: TXN-20251210-00123</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeSuccessModal()">Done</button>
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                    Go to Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
